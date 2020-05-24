@@ -3,11 +3,12 @@ const bodyParser = require("body-parser");
 const request = require("request");
 const https = require("https");
 const app = express();
+const privateFile = require('./sensitiveInfo.js');
 app.use(express.static("Public"));
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.get("/",function(req,res){
-    res.sendFile(__dirname + "/signup.html");
+    res.sendFile(__dirname + "/index.html");
 });
 
 app.post("/",function(req,res){
@@ -27,10 +28,10 @@ app.post("/",function(req,res){
         ]
     };
     const jsonData = JSON.stringify(data);
-    const url = "https://us18.api.mailchimp.com/3.0/lists/3f86b86204";
+    const url = "https://us18.api.mailchimp.com/3.0/lists/" + privateFile.myList;
     const options = {
         method:"POST",
-        auth:"haniel:77747629f5602d034a340b8e9a720c86-us18"
+        auth:"haniel:" + privateFile.authorisation
     }
     const request = https.request(url, options, function(response){
         if(response.statusCode == 200)
@@ -53,5 +54,3 @@ app.listen(process.env.PORT || 3000,function(){
     console.log("Server started at port 3000");
 });
 
-// 77747629f5602d034a340b8e9a720c86-us18
-// 3f86b86204
